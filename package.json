@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "description": "A small inn with a prime location and some bad code.",
   "scripts": {
-    "test": "jest"
+    "test": "jest",
+    "test:mocha": "mocha --require @babel/register './src/**/*-spec.js'"
   },
   "repository": {
     "type": "git",
@@ -16,8 +17,14 @@
   },
   "homepage": "https://github.com/sparkbox/code-challenge-gilded-rose#readme",
   "devDependencies": {
+    "@babel/cli": "^7.8.4",
+    "@babel/core": "^7.8.6",
     "@babel/preset-env": "^7.11.0",
+    "@babel/register": "^7.8.6",
+    "babel-loader": "^8.0.6",
     "babel-jest": "^26.2.2",
-    "jest": "^26.2.2"
+    "chai": "^4.2.0",
+    "jest": "^26.2.2",
+    "mocha": "^7.1.0"
   }
 }

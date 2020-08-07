@@ -1,7 +1,7 @@
+const expect = require('chai').expect;
+ 
 describe("Gilded Rose", function() {
-
   it("should do something", function() {
-    update_quality();
+    expect(true).to.equal(true)
   });
-
 });
