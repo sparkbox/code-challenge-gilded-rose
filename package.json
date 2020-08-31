@@ -3,8 +3,8 @@
   "version": "1.0.0",
   "description": "A small inn with a prime location and some bad code.",
   "scripts": {
-    "test": "jest",
-    "test:mocha": "mocha --require @babel/register './src/**/*-spec.js'"
+    "test:jest": "jest ./src/*.jest.spec.js",
+    "test:mocha": "mocha --require @babel/register ./src/*.mocha.spec.js"
   },
   "repository": {
     "type": "git",
