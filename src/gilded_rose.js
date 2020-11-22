@@ -39,7 +39,7 @@ export function update_quality(items) {
     return items[i].name === 'Backstage passes to a TAFKAL80ETC concert';
   }
 
-  function updateBackstagePass(i) {
+  function updateBackstagePassQuality(i) {
     if (items[i].sell_in < 0) return zeroOutQuality(i);
     if (items[i].sell_in < 5) return incrementQualityBy(i, 3);
     if (items[i].sell_in < 10) return incrementQualityBy(i, 2);
@@ -54,6 +54,15 @@ export function update_quality(items) {
     items[i].quality = Math.min(50, items[i].quality + amount);
   }
 
+  function updateRegularItemQuality(i) {
+    if (items[i].sell_in < 0) return decrementQualityBy(i, 2);
+    return decrementQualityBy(i, 1);
+  }
+
+  function decrementQualityBy(i, amount) {
+    items[i].quality = Math.max(0, items[i].quality - amount);
+  }
+
   function decrementSellIn(i) {
     if (isLegendary(i)) return;
     items[i].sell_in -= 1;
@@ -63,14 +72,7 @@ export function update_quality(items) {
     decrementSellIn(i);
     if (isLegendary(i)) return;
     if (isAgedBree(i)) return updateAgedBreeQuality(i);
-    if (isBackstagePass(i)) return updateBackstagePass(i);
-    if (items[i].quality > 0) {
-      items[i].quality = items[i].quality - 1
-    }
-    if (items[i].sell_in < 0) {
-      if (items[i].quality > 0) {
-        items[i].quality = items[i].quality - 1
-      }
-    }
+    if (isBackstagePass(i)) return updateBackstagePassQuality(i);
+    return updateRegularItemQuality(i);
   }
 }
