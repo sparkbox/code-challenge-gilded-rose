@@ -23,9 +23,8 @@ update_quality(items);
 */
 export function update_quality(items) {
   function decrementSellIn(i) {
-    if (items[i].name !== 'Sulfuras, Hand of Ragnaros') {
-      items[i].sell_in = items[i].sell_in - 1;
-    }
+    if (items[i].name === 'Sulfuras, Hand of Ragnaros') return;
+    items[i].sell_in -= 1;
   }
 
   for (let i = 0; i < items.length; i++) {
