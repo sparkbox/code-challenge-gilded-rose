@@ -35,6 +35,21 @@ export function update_quality(items) {
     incrementQualityBy(i, 1);
   }
 
+  function isBackstagePass(i) {
+    return items[i].name === 'Backstage passes to a TAFKAL80ETC concert';
+  }
+
+  function updateBackstagePass(i) {
+    if (items[i].sell_in < 0) return zeroOutQuality(i);
+    if (items[i].sell_in < 5) return incrementQualityBy(i, 3);
+    if (items[i].sell_in < 10) return incrementQualityBy(i, 2);
+    return incrementQualityBy(i, 1);
+  }
+
+  function zeroOutQuality(i) {
+    return items[i].quality = 0;
+  }
+
   function incrementQualityBy(i, amount) {
     items[i].quality = Math.min(50, items[i].quality + amount);
   }
@@ -48,34 +63,13 @@ export function update_quality(items) {
     decrementSellIn(i);
     if (isLegendary(i)) return;
     if (isAgedBree(i)) return updateAgedBreeQuality(i);
-    if (items[i].name !== 'Backstage passes to a TAFKAL80ETC concert') {
-      if (items[i].quality > 0) {
-        items[i].quality = items[i].quality - 1
-      }
-    } else {
-      if (items[i].quality < 50) {
-        items[i].quality = items[i].quality + 1
-        if (items[i].name === 'Backstage passes to a TAFKAL80ETC concert') {
-          if (items[i].sell_in < 10) {
-            if (items[i].quality < 50) {
-              items[i].quality = items[i].quality + 1
-            }
-          }
-          if (items[i].sell_in < 5) {
-            if (items[i].quality < 50) {
-              items[i].quality = items[i].quality + 1
-            }
-          }
-        }
-      }
+    if (isBackstagePass(i)) return updateBackstagePass(i);
+    if (items[i].quality > 0) {
+      items[i].quality = items[i].quality - 1
     }
     if (items[i].sell_in < 0) {
-      if (items[i].name !== 'Backstage passes to a TAFKAL80ETC concert') {
-        if (items[i].quality > 0) {
-          items[i].quality = items[i].quality - 1
-        }
-      } else {
-        items[i].quality = items[i].quality - items[i].quality
+      if (items[i].quality > 0) {
+        items[i].quality = items[i].quality - 1
       }
     }
   }
