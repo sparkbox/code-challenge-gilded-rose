@@ -22,57 +22,59 @@ const items = [
 update_quality(items);
 */
 export function update_quality(items) {
-  function isLegendary(i) {
-    return items[i].name === 'Sulfuras, Hand of Ragnaros';
+  function isLegendary(item) {
+    return item.name === 'Sulfuras, Hand of Ragnaros';
   }
 
-  function isAgedBree(i) {
-    return items[i].name === 'Aged Brie';
+  function isAgedBree(item) {
+    return item.name === 'Aged Brie';
   }
 
-  function updateAgedBreeQuality(i) {
-    if (items[i].sell_in < 0) return incrementQualityBy(i, 2);
-    incrementQualityBy(i, 1);
+  function updateAgedBreeQuality(item) {
+    if (item.sell_in < 0) return incrementQualityBy(item, 2);
+    incrementQualityBy(item, 1);
   }
 
-  function isBackstagePass(i) {
-    return items[i].name === 'Backstage passes to a TAFKAL80ETC concert';
+  function isBackstagePass(item) {
+    return item.name === 'Backstage passes to a TAFKAL80ETC concert';
   }
 
-  function updateBackstagePassQuality(i) {
-    if (items[i].sell_in < 0) return zeroOutQuality(i);
-    if (items[i].sell_in < 5) return incrementQualityBy(i, 3);
-    if (items[i].sell_in < 10) return incrementQualityBy(i, 2);
-    return incrementQualityBy(i, 1);
+  function updateBackstagePassQuality(item) {
+    if (item.sell_in < 0) return zeroOutQuality(item);
+    if (item.sell_in < 5) return incrementQualityBy(item, 3);
+    if (item.sell_in < 10) return incrementQualityBy(item, 2);
+    return incrementQualityBy(item, 1);
   }
 
-  function zeroOutQuality(i) {
-    return items[i].quality = 0;
+  function zeroOutQuality(item) {
+    return item.quality = 0;
   }
 
-  function incrementQualityBy(i, amount) {
-    items[i].quality = Math.min(50, items[i].quality + amount);
+  function incrementQualityBy(item, amount) {
+    item.quality = Math.min(50, item.quality + amount);
   }
 
-  function updateRegularItemQuality(i) {
-    if (items[i].sell_in < 0) return decrementQualityBy(i, 2);
-    return decrementQualityBy(i, 1);
+  function updateRegularItemQuality(item) {
+    if (item.sell_in < 0) return decrementQualityBy(item, 2);
+    return decrementQualityBy(item, 1);
   }
 
-  function decrementQualityBy(i, amount) {
-    items[i].quality = Math.max(0, items[i].quality - amount);
+  function decrementQualityBy(item, amount) {
+    item.quality = Math.max(0, item.quality - amount);
   }
 
-  function decrementSellIn(i) {
-    if (isLegendary(i)) return;
-    items[i].sell_in -= 1;
+  function decrementSellIn(item) {
+    if (isLegendary(item)) return;
+    item.sell_in -= 1;
   }
 
-  for (let i = 0; i < items.length; i++) {
-    decrementSellIn(i);
-    if (isLegendary(i)) return;
-    if (isAgedBree(i)) return updateAgedBreeQuality(i);
-    if (isBackstagePass(i)) return updateBackstagePassQuality(i);
-    return updateRegularItemQuality(i);
+  function updateItem(item) {
+    decrementSellIn(item);
+    if (isLegendary(item)) return;
+    if (isAgedBree(item)) return updateAgedBreeQuality(item);
+    if (isBackstagePass(item)) return updateBackstagePassQuality(item);
+    return updateRegularItemQuality(item);
   }
+
+  items.forEach(updateItem);
 }
