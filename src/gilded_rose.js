@@ -5,6 +5,60 @@ export function Item(name, sell_in, quality) {
   this.quality = quality;
 }
 
+function isLegendary(item) {
+  return item.name === 'Sulfuras, Hand of Ragnaros';
+}
+
+function isAgedBree(item) {
+  return item.name === 'Aged Brie';
+}
+
+function updateAgedBreeQuality(item) {
+  if (item.sell_in < 0) return incrementQualityBy(item, 2);
+  incrementQualityBy(item, 1);
+}
+
+function isBackstagePass(item) {
+  return item.name === 'Backstage passes to a TAFKAL80ETC concert';
+}
+
+function updateBackstagePassQuality(item) {
+  if (item.sell_in < 0) return zeroOutQuality(item);
+  if (item.sell_in < 5) return incrementQualityBy(item, 3);
+  if (item.sell_in < 10) return incrementQualityBy(item, 2);
+  return incrementQualityBy(item, 1);
+}
+
+function updateRegularItemQuality(item) {
+  if (item.sell_in < 0) return decrementQualityBy(item, 2);
+  return decrementQualityBy(item, 1);
+}
+
+function zeroOutQuality(item) {
+  return item.quality = 0;
+}
+
+function incrementQualityBy(item, amount) {
+  item.quality = Math.min(50, item.quality + amount);
+}
+
+function decrementQualityBy(item, amount) {
+  item.quality = Math.max(0, item.quality - amount);
+}
+
+function decrementSellIn(item) {
+  if (isLegendary(item)) return;
+  item.sell_in -= 1;
+}
+
+function updateItem(item) {
+  decrementSellIn(item);
+  if (isLegendary(item)) return;
+  if (isAgedBree(item)) return updateAgedBreeQuality(item);
+  if (isBackstagePass(item)) return updateBackstagePassQuality(item);
+  return updateRegularItemQuality(item);
+}
+
 /*
 * Update inventory
 * @param {Item[]} items - an array of Items representing the inventory to be updated
@@ -21,60 +75,7 @@ const items = [
 
 update_quality(items);
 */
+
 export function update_quality(items) {
-  function isLegendary(item) {
-    return item.name === 'Sulfuras, Hand of Ragnaros';
-  }
-
-  function isAgedBree(item) {
-    return item.name === 'Aged Brie';
-  }
-
-  function updateAgedBreeQuality(item) {
-    if (item.sell_in < 0) return incrementQualityBy(item, 2);
-    incrementQualityBy(item, 1);
-  }
-
-  function isBackstagePass(item) {
-    return item.name === 'Backstage passes to a TAFKAL80ETC concert';
-  }
-
-  function updateBackstagePassQuality(item) {
-    if (item.sell_in < 0) return zeroOutQuality(item);
-    if (item.sell_in < 5) return incrementQualityBy(item, 3);
-    if (item.sell_in < 10) return incrementQualityBy(item, 2);
-    return incrementQualityBy(item, 1);
-  }
-
-  function zeroOutQuality(item) {
-    return item.quality = 0;
-  }
-
-  function incrementQualityBy(item, amount) {
-    item.quality = Math.min(50, item.quality + amount);
-  }
-
-  function updateRegularItemQuality(item) {
-    if (item.sell_in < 0) return decrementQualityBy(item, 2);
-    return decrementQualityBy(item, 1);
-  }
-
-  function decrementQualityBy(item, amount) {
-    item.quality = Math.max(0, item.quality - amount);
-  }
-
-  function decrementSellIn(item) {
-    if (isLegendary(item)) return;
-    item.sell_in -= 1;
-  }
-
-  function updateItem(item) {
-    decrementSellIn(item);
-    if (isLegendary(item)) return;
-    if (isAgedBree(item)) return updateAgedBreeQuality(item);
-    if (isBackstagePass(item)) return updateBackstagePassQuality(item);
-    return updateRegularItemQuality(item);
-  }
-
   items.forEach(updateItem);
 }
